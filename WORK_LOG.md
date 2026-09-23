@@ -89,4 +89,16 @@ Format:
 - Commands (from `frontend/`): `npx tsc --noEmit` → clean; `npm run lint` → clean.
   From root: `python -m pytest backend/tests/ -v` → 6 passed, 1 skipped (live
   Gemini test needs `GEMINI_API_KEY`).
+- Commit: `6e6962f fix(frontend): Clerk v7 redirect props (fallbackRedirectUrl)`
+
+## 2026-09-23 — Phase 0-5a: GitHub Actions CI (lint + test, no Docker)
+- What: `.github/workflows/ci.yml` — backend job (pip install + pytest with
+  `CLERK_BYPASS_AUTH=true`) and frontend job (`npm ci`, `tsc`, `lint`, `build`
+  with placeholder Clerk keys). No Docker build step: Render/Vercel build from
+  the repo. Jest runs will be added with the first frontend tests.
+- How: single workflow file; backend env uses dummy `DATABASE_URL` (tests never
+  open a DB connection); frontend build uses non-secret placeholder keys.
+- Commands: validated locally — `python -m pytest backend/tests/ -v` (6 passed,
+  1 skipped), `npx tsc --noEmit` + `npm run lint` clean. (Full `npm run build`
+  runs in CI.)
 - Commit: `<hash on push>`
