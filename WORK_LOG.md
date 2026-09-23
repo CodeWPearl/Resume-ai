@@ -121,4 +121,16 @@ Format:
   `npm run lint` (frontend/) → clean.
   `npx impeccable detect frontend/src` → clean, no findings.
   `npm run build` → left to CI (first run visible under repo Actions tab).
+- Commit: `77b711c docs: log Phase 0 verification sweep in WORK_LOG`
+
+## 2026-09-23 — fix(ci): Clerk Core 3 removed SignedIn/SignedOut → Show
+- What: CI frontend `npm run build` failed prerendering `/` with
+  `Clerk: <SignedOut> is not available in @clerk/nextjs Core 3`
+  (removed 2026-03-03; single `<Show when=...>` replaces SignedIn/SignedOut/Protect).
+  `SiteHeader` now uses `<Show when="signed-out">` / `<Show when="signed-in">`.
+  Grep confirms no remaining SignedIn/SignedOut/Protect component usages.
+- How: per https://clerk.com/err/signedout-is-not-available-in-clerk-nextjs;
+  reproduced locally with CI's exact placeholder-key env, verified fixed.
+- Commands (from `frontend/`): `npx tsc --noEmit` → clean; `npm run lint` →
+  clean; `npm run build` (CI env) → 7/7 static pages generated, all routes OK.
 - Commit: `<hash on push>`

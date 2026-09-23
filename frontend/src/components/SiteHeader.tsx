@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 
 export function SiteHeader() {
   return (
@@ -14,16 +14,16 @@ export function SiteHeader() {
           <Link className="hover:text-slate-900" href="/admin">Admin</Link>
         </nav>
         <div className="ml-auto flex items-center gap-3">
-          <SignedOut>
+          <Show when="signed-out">
             <SignInButton mode="modal">
               <button className="inline-flex min-h-10 items-center rounded-lg bg-blue-700 px-4 text-sm font-medium text-white hover:bg-blue-800">
                 Sign in
               </button>
             </SignInButton>
-          </SignedOut>
-          <SignedIn>
+          </Show>
+          <Show when="signed-in">
             <UserButton />
-          </SignedIn>
+          </Show>
         </div>
       </div>
     </header>
