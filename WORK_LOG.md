@@ -111,4 +111,14 @@ Format:
   `CONVENTIONS.md`; audited repo for hardcoded keys.
 - Commands: `git grep -n -i -E "sk-(live|test)-...|AIza...|postgres://...|service_role"`
   → no hits (only `change-me` / `ci-placeholder` templates remain).
+- Commit: `01e8f0a docs: add root README with service plans, limits, and quickstart`
+
+## 2026-09-23 — verify: Phase 0 DoD sweep (tests/typecheck/lint/design)
+- What: full local verification pass after all Phase 0 changes.
+- Commands + results:
+  `python -m pytest backend/tests/ -v` → 6 passed, 1 skipped (live Gemini, no key).
+  `npx tsc --noEmit` (frontend/) → clean.
+  `npm run lint` (frontend/) → clean.
+  `npx impeccable detect frontend/src` → clean, no findings.
+  `npm run build` → left to CI (first run visible under repo Actions tab).
 - Commit: `<hash on push>`
