@@ -3,8 +3,8 @@ import logging
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.config import get_settings
-from core.clerk_auth import get_current_user, CurrentUser
+from backend.core.config import get_settings
+from backend.core.clerk_auth import get_current_user, CurrentUser
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -177,4 +177,16 @@ Format:
   `backend` failed / `frontend` success — exactly the red/green behavior Phase 0
   Prompt 5 demands. Local `python -m pytest backend/tests/ -v` re-verified after
   removal (expect 6 passed, 1 skipped).
+- Commit: `6d82341 test(ci): revert TEMPORARY canary, CI red-green proven`
+
+## 2026-09-23 — fix(backend): root-relative imports so uvicorn boots from repo root
+- What: `uvicorn backend.api.main:app` crashed with `No module named 'core'` —
+  `api/main.py` and `services/llm_client.py` used bare `from core...` imports
+  that only resolved under pytest's sys.path. Switched 3 imports to
+  `backend.`-prefixed absolute imports (matches alembic env.py + tests).
+- How: reproduced the crash via foreground uvicorn, fixed, re-verified.
+- Commands: `uvicorn backend.api.main:app --port 8000` (+ `CLERK_BYPASS_AUTH=true`)
+  → `curl localhost:8000/health` → `{"status":"ok",...}`;
+  `curl /me -H "Bearer dev-candidate"` → role candidate;
+  `python -m pytest backend/tests/` → 6 passed, 1 skipped.
 - Commit: `<hash on push>`

@@ -36,7 +36,7 @@ class LLMClient:
         embed_model: str | None = None,
         tier: str | None = None,
     ):
-        from core.config import get_settings
+        from backend.core.config import get_settings
 
         s = get_settings()
         self.api_key = api_key or os.getenv("GEMINI_API_KEY", s.GEMINI_API_KEY)
