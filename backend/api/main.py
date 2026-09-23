@@ -1,8 +1,9 @@
-"""FastAPI entrypoint. Infrastructure only (Phase 0) — no resume/JD features yet."""
+"""FastAPI entrypoint."""
 import logging
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.api.resumes import router as resumes_router
 from backend.core.config import get_settings
 from backend.core.supabase_auth import get_current_user, CurrentUser
 
@@ -19,6 +20,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(resumes_router)
 
 
 @app.get("/health")

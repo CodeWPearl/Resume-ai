@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     UPSTASH_REDIS_TOKEN: str = ""
 
     BACKEND_CORS_ORIGINS: str = "http://localhost:3000"
+    MAX_UPLOAD_MB: int = 10
 
     @property
     def cors_origins(self) -> list[str]:

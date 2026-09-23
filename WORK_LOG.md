@@ -241,4 +241,19 @@ Format:
   `/docs/project-plan/05_database_schema.md` doesn't exist in repo — schema
   designed from the plan's table names + conventional columns.
 - Commands: `python -m pytest backend/tests/test_migrations.py -v` → 2 passed.
+- Commit: `a237f87 feat(db): resumes and parsed_resume_data models plus migration`
+
+## 2026-09-24 — Phase 1 Prompt 1b: upload endpoint + Storage + BackgroundTasks stub
+- What: `POST /resumes/upload` (202): extension allowlist (.pdf/.docx) + magic-byte
+  sniff + 10MB limit (`MAX_UPLOAD_MB` in config) validated BEFORE storage → upload
+  to private Supabase Storage bucket (`{user}/{id}/{file}` via service-role) →
+  `resumes` row `uploaded` → BackgroundTasks `parse_resume_stub` flips to `parsed`
+  (Prompt 2 replaces the body). `GET /resumes/{id}` for polling, owner-or-admin
+  gated. New `services/storage.py` (DI-overridable), `services/parsing.py`,
+  `schemas/resume.py`; router registered in `main.py`.
+- How: no live Supabase yet — endpoint proven via TestClient + real Alembic-built
+  SQLite + fake storage + dev tokens.
+- Commands: `python -m pytest backend/tests/test_upload.py -v` → 7 passed
+  (e2e stored-bytes match, 3 rejection-before-storage cases, 401, cross-user 404);
+  full suite `python -m pytest backend/tests/` → 15 passed, 1 skipped.
 - Commit: `<hash on push>`
