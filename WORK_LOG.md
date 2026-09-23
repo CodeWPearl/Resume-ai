@@ -76,4 +76,17 @@ Format:
 - How: reconstructed from prior session commands and `git log --oneline`.
 - Commands: `git add WORK_LOG.md` → commit → `git push origin main`.
 - Verification: this commit touches `WORK_LOG.md` only.
-- Commit: `75e58b0 docs: add WORK_LOG.md build diary with per-change history`
+- Commit: `3ed1d6f docs: add WORK_LOG.md build diary with per-change history`
+
+## 2026-09-23 — fix(frontend): Clerk v7 redirect props (`fallbackRedirectUrl`)
+- What: `npx tsc --noEmit` failed with 3 errors — Clerk v7 removed
+  `afterSignInUrl`/`afterSignUpUrl` (SignIn/SignUp) and `afterSignOutUrl`
+  (UserButton). Replaced with `fallbackRedirectUrl="/?auto=1"`; dropped the
+  unsupported UserButton prop (sign-out redirect now provider-default).
+- How: verified prop names against installed `@clerk/shared` types
+  (`UserButtonProps` has no redirect prop; SignIn/SignUp accept
+  `fallbackRedirectUrl`/`forceRedirectUrl`).
+- Commands (from `frontend/`): `npx tsc --noEmit` → clean; `npm run lint` → clean.
+  From root: `python -m pytest backend/tests/ -v` → 6 passed, 1 skipped (live
+  Gemini test needs `GEMINI_API_KEY`).
+- Commit: `<hash on push>`
