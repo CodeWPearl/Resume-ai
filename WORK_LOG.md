@@ -101,4 +101,14 @@ Format:
 - Commands: validated locally — `python -m pytest backend/tests/ -v` (6 passed,
   1 skipped), `npx tsc --noEmit` + `npm run lint` clean. (Full `npm run build`
   runs in CI.)
+- Commit: `d49860f ci: add GitHub Actions lint plus test workflow (no Docker)`
+
+## 2026-09-23 — Phase 0-5b: root README (plans/limits) + secrets audit
+- What: root `README.md` — quickstart, service-plan/limits table (Render cold
+  starts + 750 instance-hours, Supabase 500MB/7-day pause, Gemini free-tier data
+  rule), secrets-in-dashboards note.
+- How: transcribed from `12_FINAL_STACK_AGENT_PROMPTS.md` Phase 0 Prompt 5 +
+  `CONVENTIONS.md`; audited repo for hardcoded keys.
+- Commands: `git grep -n -i -E "sk-(live|test)-...|AIza...|postgres://...|service_role"`
+  → no hits (only `change-me` / `ci-placeholder` templates remain).
 - Commit: `<hash on push>`
