@@ -221,4 +221,12 @@ Format:
   `npm install @supabase/supabase-js @supabase/ssr`, cleared stale `.next`
   (it referenced deleted routes), `npx tsc --noEmit` → clean, `npm run lint` →
   clean, `npm run build` with placeholder Supabase env → 7/7 routes OK.
+- Commit: `33a2cc9 feat(auth): frontend Clerk to Supabase Auth with custom forms`
+
+## 2026-09-24 — chore(auth): configs + docs sweep, Clerk fully out
+- What: `render.yaml` CLERK_* → SUPABASE_ANON_KEY; CI backend env
+  `SUPABASE_BYPASS_AUTH`, frontend build env → placeholder Supabase URL/anon key;
+  AGENTS.md, CONVENTIONS.md, README.md, DESIGN.md auth lines → Supabase Auth.
+  Verified via repo grep: live code/configs contain zero Clerk references
+  (remaining hits are WORK_LOG history + the original plan doc, both intentionally kept).
 - Commit: `<hash on push>`

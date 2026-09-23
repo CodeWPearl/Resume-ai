@@ -29,7 +29,7 @@ before shipping UI changes.
   flagged (amber-50/amber-700).
 
 ## Layout rules
-- App shell: top SiteHeader (logo left, role nav center, Clerk UserButton right) +
+- App shell: top SiteHeader (logo left, role nav center, email + sign-out right) +
   max-w-6xl content. Role dashboards use left section nav on desktop.
 - Score dashboard: overall score hero (large numeral + band label) + 8 category rows
   with bars + one-line explanations.

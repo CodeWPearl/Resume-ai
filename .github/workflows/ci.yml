@@ -8,7 +8,7 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     env:
-      CLERK_BYPASS_AUTH: "true"
+      SUPABASE_BYPASS_AUTH: "true"
       GEMINI_TIER: free
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/resumeiq
     steps:
@@ -37,5 +37,5 @@ jobs:
       - run: npm run build
         env:
           NEXT_PUBLIC_API_URL: http://localhost:8000
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ci-placeholder
-          CLERK_SECRET_KEY: sk_test_ci-placeholder
+          NEXT_PUBLIC_SUPABASE_URL: https://ci-placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key

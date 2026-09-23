@@ -11,7 +11,7 @@ constrained prompts + post-generation fact-check, built once, reused everywhere)
 
 ## 2. Stack (frozen — see CONVENTIONS.md)
 Next.js+TS+Tailwind+shadcn (Vercel) / FastAPI (Render Free, BackgroundTasks ONLY) /
-Supabase Postgres+pgvector + Storage / Clerk roles (candidate|recruiter|admin) /
+Supabase Postgres+pgvector + Storage + Auth / roles (candidate|recruiter|admin) /
 Upstash Redis (optional cache) / Gemini via `backend/services/llm_client.py` ONLY.
 FORBIDDEN: Docker, Celery, Railway, self-hosted embeddings, WeasyPrint.
 Prompts live in `backend/prompts/<version>/*.txt`, loaded via `load_prompt()` —
@@ -22,7 +22,7 @@ never inline in business logic.
 # Backend (from repo root)
 python -m pytest backend/tests/ -v
 uvicorn backend.api.main:app --reload            # local API on :8000
-$env:CLERK_BYPASS_AUTH="true"                    # local dev auth bypass (NEVER prod)
+$env:SUPABASE_BYPASS_AUTH="true"             # local dev auth bypass (NEVER prod)
 
 # Frontend (from frontend/)
 npx tsc --noEmit

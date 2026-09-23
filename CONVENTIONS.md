@@ -8,8 +8,9 @@ Backend: Python + FastAPI on Render Free Web Service (upgrade to $7/mo only demo
 Async: FastAPI BackgroundTasks ONLY — no Celery, no separate worker (750 instance-hrs budget).
 DB: Supabase PostgreSQL + pgvector (enable extension in dashboard). 500MB, pauses after 7d idle.
 Storage: Supabase Storage (private bucket `resumes-private`), never commit resumes to git.
-Auth: Clerk (free, 50k MAU) with roles candidate|recruiter|admin. Local dev may use
-  CLERK_BYPASS_AUTH=true + `Bearer dev-<role>` tokens. Never true in prod.
+Auth: Supabase Auth (free) with roles candidate|recruiter|admin via user_metadata.role
+  (sign-up form sets it; admins assigned in dashboard). Local dev may use
+  SUPABASE_BYPASS_AUTH=true + `Bearer dev-<role>` tokens. Never true in prod.
 Cache: Upstash Redis (free, 500k cmds/mo), optional/best-effort only.
 Embeddings: Gemini text-embedding-004 via internal wrapper ONLY (services/llm_client.py).
 LLM: Gemini via wrapper generate()/embed(). GEMINI_TIER=free => synthetic/test data ONLY.
