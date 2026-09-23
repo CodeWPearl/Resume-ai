@@ -31,6 +31,9 @@ Thumbs.db
 
 # Impeccable local overrides (keep shared skill, ignore machine-local config)
 .impeccable/config.local.json
+# Impeccable engine binaries are machine-specific — reinstall with:
+#   npx impeccable install --providers=opencode --scope=project
+.opencode/skills/*/scripts/bin/
 
 # Test / private data — resumes must NEVER be committed
 *.pdf
