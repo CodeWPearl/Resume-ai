@@ -133,4 +133,24 @@ Format:
   reproduced locally with CI's exact placeholder-key env, verified fixed.
 - Commands (from `frontend/`): `npx tsc --noEmit` → clean; `npm run lint` →
   clean; `npm run build` (CI env) → 7/7 static pages generated, all routes OK.
+- Commit: `6079c81 fix(ci): Clerk Core 3 removed SignedIn/SignedOut, use Show component`
+
+## 2026-09-23 — fix(ci): backend pip install — 3 bad pins in requirements.txt
+- What: CI `backend` job failed at `pip install` (frontend job: SUCCESS after the
+  Show fix). Diagnosed via GitHub API (`.../runs/35807007975/jobs`): step
+  `pip install -r backend/requirements.txt` → failure. Root causes, all
+  mistyped/yanked versions in `backend/requirements.txt` (never installed from
+  file locally before):
+  `tenacity==9.0.2` → `9.1.4` (9.0.2 was never released — THE breaker, pip
+  errors instantly, matches the ~40s runs);
+  `PyMuPDF==1.24.10` → `1.25.5` (1.24.10 yanked from PyPI);
+  `spacy==3.7.6` → `3.8.16` (3.7.6 yanked; 3.8.16 has cp312 manylinux_2_28
+  wheels for ubuntu-24.04 runners and cp314 wheels for local dev);
+  `psycopg2-binary==2.9.10` → `2.9.11` (adds cp314 wheels; cp312 manylinux
+  wheels kept for CI).
+- How: reproduced with `pip install --dry-run` (+ `--python-version 3.12
+  --platform manylinux... --only-binary=:all:` to mirror the runner) and PyPI
+  JSON wheel checks; full file resolves with zero errors after the fix.
+- Commands: `pip install --dry-run -r backend/requirements.txt`;
+  PyPI checks for psycopg2-binary/spacy wheels; `git push origin main` re-runs CI.
 - Commit: `<hash on push>`
