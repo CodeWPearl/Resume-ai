@@ -189,4 +189,19 @@ Format:
   → `curl localhost:8000/health` → `{"status":"ok",...}`;
   `curl /me -H "Bearer dev-candidate"` → role candidate;
   `python -m pytest backend/tests/` → 6 passed, 1 skipped.
+- Commit: `5c666b9 fix(backend): root-relative imports so uvicorn boots from repo root`
+
+## 2026-09-24 — feat(auth): backend Clerk → Supabase Auth
+- What: deleted `backend/core/clerk_auth.py` (Clerk JWKS verify); new
+  `backend/core/supabase_auth.py` with the SAME interface (`CurrentUser`,
+  `get_current_user`, `require_role`, `dev-<role>` bypass tokens) — tokens now
+  validated via `supabase.auth.get_user()` against the Auth server, roles read
+  from `user_metadata.role`. `config.py`: CLERK_* → SUPABASE_URL/ANON_KEY/
+  SERVICE_KEY + SUPABASE_BYPASS_AUTH (prod guard kept). `requirements.txt`:
+  dropped `python-jose`, added `supabase==2.31.0`, bumped `pydantic 2.10.4` →
+  `2.11.10` (supabase tree conflicts with 2.10.4 — proven by resolver error,
+  fixed, full-file dry-run resolves clean). `test_health.py` uses new bypass var.
+- How: interface-preserving swap so `api/main.py` changes one import line.
+- Commands: `python -m pytest backend/tests/` → 6 passed, 1 skipped;
+  `pip install --dry-run -r backend/requirements.txt` → zero conflicts.
 - Commit: `<hash on push>`

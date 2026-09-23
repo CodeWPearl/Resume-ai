@@ -12,13 +12,11 @@ class Settings(BaseSettings):
     ENV: str = "development"
     DATABASE_URL: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/resumeiq"
     SUPABASE_URL: str = ""
+    SUPABASE_ANON_KEY: str = ""
     SUPABASE_SERVICE_KEY: str = ""
     SUPABASE_STORAGE_BUCKET: str = "resumes-private"
-
-    CLERK_SECRET_KEY: str = ""
-    CLERK_PUBLISHABLE_KEY: str = ""
-    CLERK_JWKS_URL: str = ""
-    CLERK_BYPASS_AUTH: bool = False
+    # Set true only for local dev without a real Supabase project. Never true in prod.
+    SUPABASE_BYPASS_AUTH: bool = False
 
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-2.0-flash"
@@ -43,6 +41,6 @@ def get_settings() -> Settings:
             "GEMINI_TIER=free: Google may use prompts/responses for product improvement. "
             "Use ONLY synthetic/test resumes. Switch to paid before real user data."
         )
-    if s.CLERK_BYPASS_AUTH and s.ENV == "production":
-        raise RuntimeError("CLERK_BYPASS_AUTH must never be true in production")
+    if s.SUPABASE_BYPASS_AUTH and s.ENV == "production":
+        raise RuntimeError("SUPABASE_BYPASS_AUTH must never be true in production")
     return s

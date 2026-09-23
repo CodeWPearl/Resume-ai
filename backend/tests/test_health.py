@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault("CLERK_BYPASS_AUTH", "true")
+os.environ.setdefault("SUPABASE_BYPASS_AUTH", "true")
 os.environ.setdefault("GEMINI_TIER", "free")
 
 from fastapi.testclient import TestClient
