@@ -1,0 +1,3 @@
+Explain this ATS category score in one plain sentence for a non-technical candidate.
+Category: {category} — Score: {score}/100.
+Do not invent new facts about the candidate; explain only what the score means.

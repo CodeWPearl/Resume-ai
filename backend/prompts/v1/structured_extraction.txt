@@ -1,0 +1,11 @@
+Extract ONLY information explicitly present in the resume text below.
+Never invent, infer, or fill in missing fields. If a field is absent, use null or [].
+Return STRICT JSON matching this schema:
+{{"contact": {{"email": str|null, "phone": str|null, "links": []}},
+ "skills": [], "experience": [{{"title": str, "company": str, "dates": str, "bullets": []}}],
+ "education": [], "projects": [], "certifications": [], "languages": []}}
+
+Resume text:
+---
+{resume_text}
+---

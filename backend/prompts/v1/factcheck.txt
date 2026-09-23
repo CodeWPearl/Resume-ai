@@ -1,0 +1,13 @@
+Compare GENERATED TEXT against SOURCE RESUME. Flag any proper noun, number, metric,
+employer, tool, or achievement in the generated text that does NOT appear in the source.
+Return JSON: {{"flags": [{{"span": str, "reason": str}}], "clean": bool}}.
+
+Source resume:
+---
+{source}
+---
+
+Generated text:
+---
+{generated}
+---
