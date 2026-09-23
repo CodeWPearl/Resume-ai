@@ -256,4 +256,4 @@ Format:
 - Commands: `python -m pytest backend/tests/test_upload.py -v` → 7 passed
   (e2e stored-bytes match, 3 rejection-before-storage cases, 401, cross-user 404);
   full suite `python -m pytest backend/tests/` → 15 passed, 1 skipped.
-- Commit: `<hash on push>`
+- Commit: `bc3131a feat(upload): validated upload endpoint with Storage and stub parsing task`
