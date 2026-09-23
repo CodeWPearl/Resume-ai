@@ -153,4 +153,13 @@ Format:
   JSON wheel checks; full file resolves with zero errors after the fix.
 - Commands: `pip install --dry-run -r backend/requirements.txt`;
   PyPI checks for psycopg2-binary/spacy wheels; `git push origin main` re-runs CI.
+- Commit: `f09f70d fix(ci): correct 4 uninstallable pins in backend requirements`
+
+## 2026-09-23 — milestone: CI fully green (run #5, both jobs)
+- What: run #5 (`f09f70d`) conclusion `success` — `backend` success,
+  `frontend` success (verified via public API
+  `repos/CodeWPearl/Resume-ai/actions/runs?per_page=1` + jobs endpoint).
+  This closes Phase 0 Prompts 1–3 + 5 on the automation side. Remaining:
+  Prompt 4 dataset (needs Supabase private bucket — user action) and the
+  deliberately-broken-test check below.
 - Commit: `<hash on push>`
