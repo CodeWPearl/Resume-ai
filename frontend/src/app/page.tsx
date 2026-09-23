@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { createClient, roleOf } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UploadDropzone } from "@/components/UploadDropzone";
 
-function roleHome(role?: string): string | null {
+function roleHome(role: string): string | null {
   if (role === "recruiter") return "/recruiter";
   if (role === "admin") return "/admin";
   if (role === "candidate") return "/candidate";
@@ -13,14 +13,19 @@ function roleHome(role?: string): string | null {
 }
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ auto?: string }> }) {
-  const { userId } = await auth();
   const params = await searchParams;
   // Role-aware redirect after login: ?auto=1 triggers it without trapping logged-out users.
-  if (userId && params.auto) {
-    const user = await currentUser();
-    const role = (user?.publicMetadata?.role as string | undefined) ?? "candidate";
-    const dest = roleHome(role);
-    if (dest) redirect(dest);
+  if (params.auto) {
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const dest = user ? roleHome(roleOf(user)) : null;
+      if (dest) redirect(dest);
+    } catch {
+      // Unreachable Supabase project (e.g. CI placeholder env) — render logged-out view.
+    }
   }
 
   return (

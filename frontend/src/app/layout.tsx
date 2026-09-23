@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -14,16 +13,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
-      <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-        <body className="flex min-h-full flex-col bg-white text-slate-900">
-          <SiteHeader />
-          <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</div>
-          <footer className="border-t border-slate-200 py-4 text-center text-[13px] text-slate-500">
-            ResumeIQ Phase 0 — backend: {process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}
-          </footer>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-white text-slate-900">
+        <SiteHeader />
+        <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</div>
+        <footer className="border-t border-slate-200 py-4 text-center text-[13px] text-slate-500">
+          ResumeIQ Phase 0 — backend: {process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}
+        </footer>
+      </body>
+    </html>
   );
 }

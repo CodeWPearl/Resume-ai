@@ -1,7 +1,36 @@
+"use client";
+import * as React from "react";
 import Link from "next/link";
-import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
+  const router = useRouter();
+  const [email, setEmail] = React.useState<string | null>(null);
+  const [ready, setReady] = React.useState(false);
+
+  React.useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setEmail(data.user?.email ?? null);
+      setReady(true);
+    });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setEmail(session?.user?.email ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  async function signOut() {
+    await createClient().auth.signOut();
+    setEmail(null);
+    router.push("/");
+    router.refresh();
+  }
+
   return (
     <header className="border-b border-slate-200 bg-white">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
@@ -14,16 +43,14 @@ export function SiteHeader() {
           <Link className="hover:text-slate-900" href="/admin">Admin</Link>
         </nav>
         <div className="ml-auto flex items-center gap-3">
-          <Show when="signed-out">
-            <SignInButton mode="modal">
-              <button className="inline-flex min-h-10 items-center rounded-lg bg-blue-700 px-4 text-sm font-medium text-white hover:bg-blue-800">
-                Sign in
-              </button>
-            </SignInButton>
-          </Show>
-          <Show when="signed-in">
-            <UserButton />
-          </Show>
+          {!ready ? null : email ? (
+            <>
+              <span className="hidden text-sm text-slate-600 sm:inline">{email}</span>
+              <Button variant="secondary" size="sm" onClick={signOut}>Sign out</Button>
+            </>
+          ) : (
+            <Button asChild size="sm"><Link href="/sign-in">Sign in</Link></Button>
+          )}
         </div>
       </div>
     </header>

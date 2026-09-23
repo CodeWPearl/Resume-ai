@@ -204,4 +204,21 @@ Format:
 - How: interface-preserving swap so `api/main.py` changes one import line.
 - Commands: `python -m pytest backend/tests/` → 6 passed, 1 skipped;
   `pip install --dry-run -r backend/requirements.txt` → zero conflicts.
+- Commit: `bd0cf32 feat(auth): backend Clerk to Supabase Auth, same role interface`
+
+## 2026-09-24 — feat(auth): frontend Clerk → Supabase Auth
+- What: removed `@clerk/nextjs`; added `@supabase/supabase-js` + `@supabase/ssr`.
+  New `lib/supabase/{client,server}.ts` (+ shared `roleOf()` from user_metadata),
+  `middleware.ts` does session refresh + redirects logged-out users from the 3
+  portals, `SiteHeader` is a session-aware client component (email + sign out),
+  custom sign-in (email/password) and sign-up (email/password + role select
+  writing `user_metadata.role`) forms in our design-system components, home keeps
+  `?auto=1` role redirect via server `getUser()`, `/admin` redirects non-admins
+  server-side. Deleted Clerk `[[...sign-in]]`/`[[...sign-up]]` routes.
+- How: no Auth-UI dep (custom forms = full DESIGN.md control); every server
+  `getUser()` wrapped so CI placeholder env renders logged-out views.
+- Commands (from `frontend/`): `npm uninstall @clerk/nextjs`,
+  `npm install @supabase/supabase-js @supabase/ssr`, cleared stale `.next`
+  (it referenced deleted routes), `npx tsc --noEmit` → clean, `npm run lint` →
+  clean, `npm run build` with placeholder Supabase env → 7/7 routes OK.
 - Commit: `<hash on push>`
