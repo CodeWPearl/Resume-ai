@@ -162,4 +162,11 @@ Format:
   This closes Phase 0 Prompts 1–3 + 5 on the automation side. Remaining:
   Prompt 4 dataset (needs Supabase private bucket — user action) and the
   deliberately-broken-test check below.
+- Commit: `eb60281 docs: log CI-green milestone (run 5, both jobs) in WORK_LOG`
+
+## 2026-09-23 — DoD: deliberately broken test to prove CI fails (TEMPORARY)
+- What: added `backend/tests/test_ci_canary.py` with one `assert False` per
+  Phase 0 Prompt 5 DoD ("fails on a deliberately broken test, verify once,
+  then revert"). Local check first: `python -m pytest backend/tests/test_ci_canary.py`
+  → 1 failed as intended. Revert commit follows once CI run #6 goes red.
 - Commit: `<hash on push>`
