@@ -15,8 +15,8 @@ def test_health_ok():
 
 
 def test_me_rejects_missing_token():
-    # Bypass OFF for this check: missing token must 401/403 even in bypass mode.
-    # With bypass on and no token, HTTPBearer(auto_error=False) -> None -> 401.
+    # Bypass is ON, but a missing token must still 401: HTTPBearer(auto_error=False)
+    # yields None creds, and get_current_user rejects before any bypass logic.
     r = client.get("/me")
     assert r.status_code in (401, 403)
 
