@@ -169,4 +169,12 @@ Format:
   Phase 0 Prompt 5 DoD ("fails on a deliberately broken test, verify once,
   then revert"). Local check first: `python -m pytest backend/tests/test_ci_canary.py`
   → 1 failed as intended. Revert commit follows once CI run #6 goes red.
+- Commit: `b0f25d5 test(ci): TEMPORARY canary to prove CI fails on broken test`
+
+## 2026-09-23 — DoD complete: canary reverted, CI green again
+- What: deleted `backend/tests/test_ci_canary.py`. Proof recorded: run #6
+  (`eb60281`, clean) → success; run #7 (`b0f25d5`, canary) → failure with
+  `backend` failed / `frontend` success — exactly the red/green behavior Phase 0
+  Prompt 5 demands. Local `python -m pytest backend/tests/ -v` re-verified after
+  removal (expect 6 passed, 1 skipped).
 - Commit: `<hash on push>`
