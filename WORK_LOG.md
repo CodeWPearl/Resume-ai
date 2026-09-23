@@ -229,4 +229,16 @@ Format:
   AGENTS.md, CONVENTIONS.md, README.md, DESIGN.md auth lines → Supabase Auth.
   Verified via repo grep: live code/configs contain zero Clerk references
   (remaining hits are WORK_LOG history + the original plan doc, both intentionally kept).
+- Commit: `5c666b9 fix(backend): root-relative imports so uvicorn boots from repo root`
+
+## 2026-09-24 — Phase 1 Prompt 1a: resumes + parsed_resume_data models + migration
+- What: `backend/models/resume.py` (`ResumeRecord`: user/org/file/status flow
+  uploaded→parsing→parsed|failed; `ParsedResumeData`: raw_text + 7 JSON fields;
+  no embedding column yet — Prompt 2 adds pgvector), Alembic revision
+  `0001_resumes` with reversible upgrade/downgrade, `tests/conftest.upgrade_db`
+  + `test_migrations.py` running upgrade AND downgrade for real against throwaway
+  SQLite (same migration runs on Supabase via DATABASE_URL). Note: the plan's
+  `/docs/project-plan/05_database_schema.md` doesn't exist in repo — schema
+  designed from the plan's table names + conventional columns.
+- Commands: `python -m pytest backend/tests/test_migrations.py -v` → 2 passed.
 - Commit: `<hash on push>`
