@@ -276,6 +276,22 @@ Format:
   full suite → 17 passed, 1 skipped (15 old + 2 new).
 - Commits: `927e141`, `975dc3e`, `dcc1420`
 
+## 2026-09-26 — LIVE: Postgres + migration + real-auth e2e all proven
+- What: user supplied the DB password (`R@…`, `@` must be URL-encoded as `%40`
+  or the URI parser splits the host — noted for Render env entry). Verified live
+  against Supabase Postgres 17.6: `CREATE EXTENSION vector` OK, real
+  `alembic upgrade head` created both tables, then a TRUE end-to-end with zero
+  mocks — created a real candidate user via Admin API, signed in for a real JWT,
+  POSTed a real synthetic resume (202), background task flipped it to `parsed`
+  in the real DB + real Storage object, then deleted user/row/object.
+  Post-check: 0 rows, 0 probe users, empty bucket. Two bugs found live and fixed
+  separately: `ba474fb` env.py `%`-escaping for encoded passwords (ConfigParser
+  interpolation), `ce8ea22` client construction moved out of the 401 try-block
+  (a missing `supabase` package had masked itself as "invalid token").
+- Commands: temp scripts (deleted after) for bootstrap/migrate/e2e/clean-check;
+  full suite still 17 passed, 1 skipped.
+- Note: secrets live ONLY in gitignored `backend/.env`; `git grep` clean.
+
 ## 2026-09-26 — fix(llm): retired default models → live-verified IDs (backfill)
 - What: the user's Gemini key worked, but `gemini-2.0-flash` is retired (live 404)
   and `text-embedding-004` is gone from the models list. Queried
