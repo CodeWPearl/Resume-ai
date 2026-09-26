@@ -16,8 +16,9 @@ pytest==8.3.4
 pytest-asyncio==0.25.0
 respx==0.22.0
 PyMuPDF==1.25.5
-python-docx==1.1.2
+python-docx==1.2.0
 pytesseract==0.3.13
+pillow==12.2.0
 spacy==3.8.16
 reportlab==4.2.5
 redis==5.2.1
