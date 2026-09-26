@@ -51,8 +51,10 @@ async def upload_resume(
     storage=Depends(get_storage),
 ):
     settings = get_settings()
-    data = await file.read()
-    _validate(file.filename, data, settings.MAX_UPLOAD_MB * 1024 * 1024)
+    limit_bytes = settings.MAX_UPLOAD_MB * 1024 * 1024
+    # Bounded read: never buffer more than limit+1 bytes (Render Free has 512MB).
+    data = await file.read(limit_bytes + 1)
+    _validate(file.filename, data, limit_bytes)
 
     resume = ResumeRecord(
         user_id=user.user_id,
@@ -67,8 +69,18 @@ async def upload_resume(
     db.flush()  # assign id before building the storage path
     assert resume.id is not None
     resume.storage_path = f"{user.user_id}/{resume.id}/{resume.filename}"
-    storage.upload(settings.SUPABASE_STORAGE_BUCKET, resume.storage_path, data, resume.mime_type)
-    db.commit()
+    try:
+        storage.upload(settings.SUPABASE_STORAGE_BUCKET, resume.storage_path, data, resume.mime_type)
+        db.commit()
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:  # noqa: BLE001
+        # Storage succeeded but the row did not persist (or vice versa) — roll back
+        # and remove any orphan file so no phantom objects accumulate.
+        db.rollback()
+        storage.delete(settings.SUPABASE_STORAGE_BUCKET, resume.storage_path)
+        raise HTTPException(status_code=502, detail="Could not save upload") from e
 
     background.add_task(parsing.parse_resume_stub, resume.id)
     return ResumeUploadResponse(id=resume.id, status="uploaded", filename=resume.filename)
