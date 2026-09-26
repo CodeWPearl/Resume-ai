@@ -59,8 +59,11 @@ def get_current_user(
         raise HTTPException(status_code=401, detail="Invalid dev token")
 
     # Production path: validate against the Supabase Auth server.
+    # Client construction stays OUTSIDE the try: a broken server setup must
+    # surface as 500, never masquerade as an invalid user token (401).
+    client = _get_client()
     try:
-        resp = _get_client().auth.get_user(token)
+        resp = client.auth.get_user(token)
         user = resp.user
     except Exception as e:  # noqa: BLE001
         logger.warning("Supabase token rejected: %s", e)
