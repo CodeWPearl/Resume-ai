@@ -229,7 +229,7 @@ Format:
   AGENTS.md, CONVENTIONS.md, README.md, DESIGN.md auth lines → Supabase Auth.
   Verified via repo grep: live code/configs contain zero Clerk references
   (remaining hits are WORK_LOG history + the original plan doc, both intentionally kept).
-- Commit: `5c666b9 fix(backend): root-relative imports so uvicorn boots from repo root`
+- Commit: `6bf9ee8 chore(auth): configs and docs sweep, Clerk fully out`
 
 ## 2026-09-24 — Phase 1 Prompt 1a: resumes + parsed_resume_data models + migration
 - What: `backend/models/resume.py` (`ResumeRecord`: user/org/file/status flow
@@ -257,3 +257,21 @@ Format:
   (e2e stored-bytes match, 3 rejection-before-storage cases, 401, cross-user 404);
   full suite `python -m pytest backend/tests/` → 15 passed, 1 skipped.
 - Commit: `bc3131a feat(upload): validated upload endpoint with Storage and stub parsing task`
+
+## Backfilled: two small commits that shipped without diary entries (rule fix)
+- `ad46dcd test: fix misleading bypass comment in health tests` — corrected the
+  `test_me_rejects_missing_token` comment (bypass is ON; None creds reject before
+  bypass logic). Verified: `test_health.py` 4 passed.
+- `60619bf chore: drop duplicated .next entry in gitignore` — removed the repeated
+  `.next/` line. No behavior change.
+
+## 2026-09-26 — harden(upload): orphan compensation + bounded read + tests
+- What (3 one-file commits): `927e141` added best-effort `delete()` to
+  `StorageService`/Supabase impl; `975dc3e` wrapped upload+commit in try/except
+  (rollback + orphan delete + 502) and capped body reads at limit+1 bytes;
+  `dcc1420` added `FakeStorage.delete` + 2 tests (storage-failure rollback,
+  commit-failure compensation). Found by a two-agent sweep (storage verified live:
+  project reachable, both buckets private, Auth healthy; backend audited green).
+- Commands: `python -m pytest backend/tests/test_upload.py -v` → 9 passed;
+  full suite → 17 passed, 1 skipped (15 old + 2 new).
+- Commits: `927e141`, `975dc3e`, `dcc1420`
