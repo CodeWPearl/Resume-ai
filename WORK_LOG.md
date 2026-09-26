@@ -275,3 +275,29 @@ Format:
 - Commands: `python -m pytest backend/tests/test_upload.py -v` → 9 passed;
   full suite → 17 passed, 1 skipped (15 old + 2 new).
 - Commits: `927e141`, `975dc3e`, `dcc1420`
+
+## 2026-09-26 — fix(llm): retired default models → live-verified IDs (backfill)
+- What: the user's Gemini key worked, but `gemini-2.0-flash` is retired (live 404)
+  and `text-embedding-004` is gone from the models list. Queried
+  `v1beta/models` live: generation default → `gemini-3.8-flash` (first tried
+  `gemini-2.5-flash`, rejected for new free-tier accounts; one transient 503 on
+  3.8-flash cleared after 70s), embedding → `gemini-embedding-001` (3072-dim —
+  NOTE for Prompt 2: pgvector column width must fit 3072, not 768).
+- Commands: live `generate('Reply with exactly: ok')` → `ok`;
+  `embed('hello world')` → 3072 floats; `test_llm_client.py` → 3 passed.
+- Commits (one file each): `7d23f33` config.py, `9a586a7` .env.example,
+  `41dc53a` render.yaml.
+
+## 2026-09-26 — Phase 0 Prompt 4 DONE: 50 synthetic resumes + 20 JDs in bucket
+- What: `backend/scripts/generate_test_dataset.py` (seeded RNG, zero network/LLM
+  calls): 50 resumes 10 roles×5 (35 PDF in 3 layouts, 10 DOCX incl. tables,
+  5 scanned image-only PDFs), 20 JDs (junior+senior per family), manifest +
+  bucket README. Identities obviously fake (Demo/Testerson/TestCorp/@example.com).
+  Verified: 72 files, none empty, DOCX opens (20 paras), scanned PDF has 0 text
+  chars (correct — exercises OCR path), multi-page resume present. Uploaded 72/72
+  to private bucket `test-dataset` via storage API; bucket listing confirms 72
+  incl. manifest + README. Local `test-data/` gitignored; generator committed.
+- Commands: `python backend/scripts/generate_test_dataset.py --out test-data
+  --resumes 50 --jds 20 --seed 42`; bucket list check → 72 objects.
+- Commits (one file each): `06ebf0f` requirements (docx 1.2.0 + pillow 12.2.0),
+  `458b606` generator, `0157022` gitignore test-data/.
