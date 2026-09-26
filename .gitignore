@@ -39,3 +39,4 @@ Thumbs.db
 *.docx
 !docs/**/*.pdf
 private-data/
+test-data/
