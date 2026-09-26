@@ -12,6 +12,10 @@ class StorageService:
     def upload(self, bucket: str, path: str, data: bytes, content_type: str) -> str:
         raise NotImplementedError
 
+    def delete(self, bucket: str, path: str) -> None:
+        """Best-effort removal (orphan compensation). Must never raise."""
+        raise NotImplementedError
+
 
 class SupabaseStorageService(StorageService):
     def __init__(self):
@@ -31,6 +35,12 @@ class SupabaseStorageService(StorageService):
             logger.exception("Storage upload failed for %s/%s", bucket, path)
             raise HTTPException(status_code=502, detail="File storage unavailable") from e
         return path
+
+    def delete(self, bucket: str, path: str) -> None:
+        try:
+            self._client.storage.from_(bucket).remove([path])
+        except Exception:  # noqa: BLE001
+            logger.exception("Storage delete failed for %s/%s (orphan)", bucket, path)
 
 
 def get_storage() -> StorageService:
