@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     SUPABASE_BYPASS_AUTH: bool = False
 
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.0-flash"
-    GEMINI_EMBED_MODEL: str = "text-embedding-004"
+    GEMINI_MODEL: str = "gemini-3.8-flash"
+    GEMINI_EMBED_MODEL: str = "gemini-embedding-001"
     GEMINI_TIER: str = "free"  # free | paid
 
     UPSTASH_REDIS_URL: str = ""
