@@ -17,7 +17,8 @@ db_url = os.getenv("DATABASE_URL", "")
 # Alembic needs a sync psycopg2 URL; allow asyncpg-style envs by normalising.
 if db_url.startswith("postgresql+asyncpg"):
     db_url = db_url.replace("postgresql+asyncpg", "postgresql+psycopg2")
-config.set_main_option("sqlalchemy.url", db_url)
+# ConfigParser interpolates % — escape it or passwords with %XX sequences break.
+config.set_main_option("sqlalchemy.url", db_url.replace("%", "%%"))
 
 target_metadata = Base.metadata
 
